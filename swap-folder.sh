@@ -25,4 +25,4 @@ vagrant ssh -c "
 VBoxManage sharedfolder remove "$VM_NAME" --name "$SHARE_NAME" --transient 2>/dev/null || true
 VBoxManage sharedfolder add "$VM_NAME" --name "$SHARE_NAME" --hostpath "$NEW_PATH" --transient
 
-vagrant ssh -c "sudo mount -t vboxsf $SHARE_NAME $MOUNT_POINT && echo '✅ Mounted $NEW_PATH -> $MOUNT_POINT'"
+vagrant ssh -c "sudo mount -t vboxsf -o uid=\$(id -u vagrant),gid=\$(id -g vagrant) $SHARE_NAME $MOUNT_POINT && echo '✅ Mounted $NEW_PATH -> $MOUNT_POINT'"

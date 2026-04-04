@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-24.04"
 
   #config.vm.synced_folder ".", "/home/vagrant/projects", type: "virtualbox"
-  config.vm.synced_folder File.expand_path("~/04_virt/projects"), "/home/vagrant/projects", type: "virtualbox", id: "projects"
+  config.vm.synced_folder File.expand_path("~/04_virt/projects"), "/home/vagrant/projects", type: "virtualbox", id: "projects", owner: "vagrant", group: "vagrant"
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "8192"
