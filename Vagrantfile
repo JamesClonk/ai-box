@@ -1,6 +1,12 @@
 #vm_name = File.basename(Dir.getwd)
 vm_name = "ai-box"
 
+# source host env vars for AWS identity provider
+File.readlines(File.expand_path("~/.aws_identity_provider")).each do |line|
+  key, value = line.strip.match(/^export\s+(\w+)=["']?(.+?)["']?$/)&.captures
+  ENV[key] = value if key
+end
+
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-24.04"
 
@@ -56,9 +62,14 @@ Vagrant.configure("2") do |config|
   SHELL
 
   # vagrant
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+  config.vm.provision "shell", privileged: false,
+    env: {
+      "AWS_IDENTITY_PROVIDER_URL" => ENV.fetch("AWS_IDENTITY_PROVIDER_URL"),
+      "AWS_REGION" => ENV.fetch("AWS_REGION")
+    },
+    inline: <<-SHELL
     export PATH="$HOME/.local/bin:$PATH"
-    echo 'PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    grep 'PATH="$HOME/.local/bin:$PATH"' ~/.bashrc 1>/dev/null || echo 'PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 
     # taskfile
     curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
@@ -67,7 +78,7 @@ Vagrant.configure("2") do |config|
     curl https://mise.run | sh
     mise --version
     eval "$(mise activate bash)"
-    echo 'eval "$(mise activate bash)"' >> ~/.bashrc
+    grep 'eval "$(mise activate bash)"' ~/.bashrc 1>/dev/null || echo 'eval "$(mise activate bash)"' >> ~/.bashrc
 
     # mise languages
     mise install golang@1.22.12
@@ -99,9 +110,16 @@ Vagrant.configure("2") do |config|
     claude --version
 
     # kiro
-    curl -fsSL https://cli.kiro.dev/install | bash
+    curl -fsSL https://cli.kiro.dev/install | bash || true
     kiro-cli --version
-    echo 'alias kiro="kiro-cli login --identity-provider ${AWS_IDENTITY_PROVIDER_URL} --region ${AWS_REGION} --use-device-flow; kiro-cli"' >> ~/.bashrc
+    grep 'kiro()' ~/.bashrc 1>/dev/null || cat >> ~/.bashrc << EOF
+kiro() {
+  if ! kiro-cli whoami &>/dev/null; then
+    kiro-cli login --identity-provider ${AWS_IDENTITY_PROVIDER_URL} --region ${AWS_REGION} --use-device-flow
+  fi
+  kiro-cli "\\$@"
+}
+EOF
   SHELL
 
 end
