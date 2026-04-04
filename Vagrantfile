@@ -151,7 +151,8 @@ Vagrant.configure("2") do |config|
       && echo "alias fyl='fly'" >> ~/.bashrc \
       && echo "git config --global diff.tool nvimdiff" >> ~/.bashrc \
       && echo "git config --global merge.tool nvimdiff" >> ~/.bashrc \
-      && echo "alias k='kubectl'" >> ~/.bashrc
+      && echo "alias k='kubectl'" >> ~/.bashrc \
+      && echo '[ -z "$TMUX" ] && exec tmux new-session -A -s dev' >> ~/.bashrc
 
     # claude
     npm install -g @anthropic-ai/claude-code --no-audit
