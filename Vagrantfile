@@ -101,6 +101,7 @@ Vagrant.configure("2") do |config|
     # kiro
     curl -fsSL https://cli.kiro.dev/install | bash
     kiro-cli --version
+    echo 'alias kiro="kiro-cli login --identity-provider ${AWS_IDENTITY_PROVIDER_URL} --region ${AWS_REGION} --use-device-flow; kiro-cli"' >> ~/.bashrc
   SHELL
 
 end
