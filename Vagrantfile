@@ -37,6 +37,9 @@ Vagrant.configure("2") do |config|
   #config.vm.network "forwarded_port", guest: 8080, host: 8080, auto_correct: true
   #config.vm.network "forwarded_port", guest: 3000, host: 3000, auto_correct: true
 
+  # nvim config
+  config.vm.provision "file", source: ".config/nvim", destination: "~/.config/nvim"
+
   # root
   config.vm.provision "shell", inline: <<-SHELL
     export DEBIAN_FRONTEND=noninteractive
@@ -89,9 +92,18 @@ Vagrant.configure("2") do |config|
     mise use --global node@22
     mise activate --shims
 
+    # golang tools
+    go install golang.org/x/tools/gopls@latest
+    go install golang.org/x/tools/cmd/goimports@latest
+
     # install venv & ansible
     pip install --user virtualenv
     pip install --user ansible
+    pip install --user yamllint
+    pip install --user pgcli
+
+    # nodejs tools
+    npm install -g prettier
 
     # install bundler
     gem install bundler
@@ -105,8 +117,27 @@ Vagrant.configure("2") do |config|
     gem install chronic
     gem install json
     gem install rexml
+    gem install standard
     gem install standardrb
     gem install ruby-lsp
+
+    # setup nvim
+    mkdir ~/.tmp || true
+    nvim --headless +PlugInstall +qall
+    nvim --headless +TSUpdate +qall
+    nvim --headless +'helptags ALL' +qall
+
+    # setup bash
+    grep 'k=kubectl' ~/.bashrc || echo 'export SHELL="/bin/bash"' >> ~/.bashrc \
+      && echo 'export VISUAL=vim' >> ~/.bashrc \
+      && echo 'export EDITOR=vim' >> ~/.bashrc \
+      && echo 'set -o vi' >> ~/.bashrc \
+      && echo "alias ll='ls -la --color=auto'" >> ~/.bashrc \
+      && echo "alias la='ls -la --color=auto'" >> ~/.bashrc \
+      && echo "alias vi='vim'" >> ~/.bashrc \
+      && echo "alias vim='vim'" >> ~/.bashrc \
+      && echo "alias fyl='fly'" >> ~/.bashrc \
+      && echo "alias k='kubectl'" >> ~/.bashrc \
 
     # claude
     npm install -g @anthropic-ai/claude-code --no-audit
