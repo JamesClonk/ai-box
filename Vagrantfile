@@ -39,6 +39,8 @@ Vagrant.configure("2") do |config|
 
   # nvim config
   config.vm.provision "file", source: ".config/nvim", destination: "~/.config/nvim"
+  config.vm.provision "file", source: ".config/.standard.yml", destination: "~/.standard.yml"
+  config.vm.provision "file", source: ".config/.tmux.conf", destination: "~/.tmux.conf"
 
   # root
   config.vm.provision "shell", inline: <<-SHELL
@@ -46,13 +48,19 @@ Vagrant.configure("2") do |config|
 
     # basics
     apt-get update
-    apt-get install -y docker.io git unzip bzip2 neovim tmux ruby-dev python3-dev \
+    apt-get install -y docker.io git unzip bzip2 tmux ruby-dev python3-dev \
       curl wget jq ca-certificates apt-transport-https parallel util-linux \
       iputils-arping iputils-clockdiff iputils-ping iputils-tracepath iproute2 \
       cmake openssl dnsutils uuid-runtime netcat-openbsd gettext-base lsb-release psmisc \
       iptables ethtool wireguard net-tools traceroute apache2-utils openssh-client \
       libreadline-dev libtool libssl-dev libffi-dev libyaml-dev libz-dev chrony \
       bsdextrautils
+
+    # install latest neovim from github releases
+    NVIM_ARCH="$(uname -m | sed 's/aarch64/arm64/')"
+    curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz" | tar xz -C /opt
+    ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/nvim
+    ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/vim
 
     # kubectl
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
@@ -90,7 +98,6 @@ Vagrant.configure("2") do |config|
     mise use --global ruby@3.2.10
     mise use --global python@3.13.11
     mise use --global node@22
-    mise activate --shims
 
     # golang tools
     go install golang.org/x/tools/gopls@latest
@@ -122,13 +129,18 @@ Vagrant.configure("2") do |config|
     gem install ruby-lsp
 
     # setup nvim
-    mkdir ~/.tmp || true
-    nvim --headless +PlugInstall +qall
+    mkdir -p ~/.tmp
+    nvim --headless -u ~/.config/nvim/.vimrc +'PlugInstall --sync' +qall
     nvim --headless +TSUpdate +qall
     nvim --headless +'helptags ALL' +qall
 
     # setup bash
     grep 'k=kubectl' ~/.bashrc || echo 'export SHELL="/bin/bash"' >> ~/.bashrc \
+      && echo 'export TERM=xterm-256color' >> ~/.bashrc \
+      && echo 'export HISTCONTROL=ignoreboth:erasedups' >> ~/.bashrc \
+      && echo 'export vim=nvim' >> ~/.bashrc \
+      && echo 'export vi=nvim' >> ~/.bashrc \
+      && echo 'export vimdiff="nvim -d"' >> ~/.bashrc \
       && echo 'export VISUAL=vim' >> ~/.bashrc \
       && echo 'export EDITOR=vim' >> ~/.bashrc \
       && echo 'set -o vi' >> ~/.bashrc \
@@ -137,7 +149,9 @@ Vagrant.configure("2") do |config|
       && echo "alias vi='vim'" >> ~/.bashrc \
       && echo "alias vim='vim'" >> ~/.bashrc \
       && echo "alias fyl='fly'" >> ~/.bashrc \
-      && echo "alias k='kubectl'" >> ~/.bashrc \
+      && echo "git config --global diff.tool nvimdiff" >> ~/.bashrc \
+      && echo "git config --global merge.tool nvimdiff" >> ~/.bashrc \
+      && echo "alias k='kubectl'" >> ~/.bashrc
 
     # claude
     npm install -g @anthropic-ai/claude-code --no-audit
