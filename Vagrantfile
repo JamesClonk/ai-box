@@ -87,6 +87,7 @@ Vagrant.configure("2") do |config|
     mise use --global ruby@3.2.10
     mise use --global python@3.13.11
     mise use --global node@22
+    mise activate --shims
 
     # install venv & ansible
     pip install --user virtualenv
@@ -104,6 +105,8 @@ Vagrant.configure("2") do |config|
     gem install chronic
     gem install json
     gem install rexml
+    gem install standardrb
+    gem install ruby-lsp
 
     # claude
     npm install -g @anthropic-ai/claude-code --no-audit
