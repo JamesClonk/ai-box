@@ -4,7 +4,7 @@ description: >
   Ultra-compressed communication mode. Slash token usage ~75% by speaking like caveman
   while keeping full technical accuracy. Use when user says "caveman mode", "talk like caveman",
   "use caveman", "less tokens", "be brief", or invokes /caveman. Also auto-triggers
-  when token efficiency is requested.
+  when token efficiency is requested. Also auto-triggers as soon as a project needs to be analyzed.
 ---
 
 # Caveman Mode
