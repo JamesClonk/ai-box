@@ -41,12 +41,22 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: ".config/nvim", destination: "~/.config/nvim"
   config.vm.provision "file", source: ".config/.standard.yml", destination: "~/.standard.yml"
   config.vm.provision "file", source: ".config/.tmux.conf", destination: "~/.tmux.conf"
+  config.vm.provision "file", source: ".config/.bashrc", destination: "~/.bashrc"
 
   # root
-  config.vm.provision "shell", inline: <<-SHELL
-    export DEBIAN_FRONTEND=noninteractive
-
+  config.vm.provision "shell", privileged: true,
+    env: {
+      "AWS_IDENTITY_PROVIDER_URL" => ENV.fetch("AWS_IDENTITY_PROVIDER_URL"),
+      "AWS_REGION" => ENV.fetch("AWS_REGION")
+    },
+    inline: <<-SHELL
+    # profile env vars
+    cat > /etc/profile.d/aws_identity_provider.sh << EOF
+export AWS_IDENTITY_PROVIDER_URL="${AWS_IDENTITY_PROVIDER_URL}"
+export AWS_REGION="${AWS_REGION}"
+EOF
     # basics
+    export DEBIAN_FRONTEND=noninteractive
     apt-get update
     apt-get install -y docker.io git unzip bzip2 tmux ruby-dev python3-dev \
       curl wget jq ca-certificates apt-transport-https parallel util-linux \
@@ -79,8 +89,7 @@ Vagrant.configure("2") do |config|
       "AWS_REGION" => ENV.fetch("AWS_REGION")
     },
     inline: <<-SHELL
-    export PATH="$HOME/.local/bin:$PATH"
-    grep 'PATH="$HOME/.local/bin:$PATH"' ~/.bashrc 1>/dev/null || echo 'PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
     # taskfile
     curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | sudo -E bash
@@ -89,7 +98,6 @@ Vagrant.configure("2") do |config|
     curl https://mise.run | sh
     mise --version
     eval "$(mise activate bash)"
-    grep 'eval "$(mise activate bash)"' ~/.bashrc 1>/dev/null || echo 'eval "$(mise activate bash)"' >> ~/.bashrc
 
     # mise languages
     mise install golang@1.22.12
@@ -134,26 +142,6 @@ Vagrant.configure("2") do |config|
     nvim --headless +TSUpdate +qall
     nvim --headless +'helptags ALL' +qall
 
-    # setup bash
-    grep 'k=kubectl' ~/.bashrc || echo 'export SHELL="/bin/bash"' >> ~/.bashrc \
-      && echo 'export TERM=xterm-256color' >> ~/.bashrc \
-      && echo 'export HISTCONTROL=ignoreboth:erasedups' >> ~/.bashrc \
-      && echo 'export vim=nvim' >> ~/.bashrc \
-      && echo 'export vi=nvim' >> ~/.bashrc \
-      && echo 'export vimdiff="nvim -d"' >> ~/.bashrc \
-      && echo 'export VISUAL=vim' >> ~/.bashrc \
-      && echo 'export EDITOR=vim' >> ~/.bashrc \
-      && echo 'set -o vi' >> ~/.bashrc \
-      && echo "alias ll='ls -la --color=auto'" >> ~/.bashrc \
-      && echo "alias la='ls -la --color=auto'" >> ~/.bashrc \
-      && echo "alias vi='vim'" >> ~/.bashrc \
-      && echo "alias vim='vim'" >> ~/.bashrc \
-      && echo "alias fyl='fly'" >> ~/.bashrc \
-      && echo "git config --global diff.tool nvimdiff" >> ~/.bashrc \
-      && echo "git config --global merge.tool nvimdiff" >> ~/.bashrc \
-      && echo "alias k='kubectl'" >> ~/.bashrc \
-      && echo '[ -z "$TMUX" ] && exec tmux new-session -A -s dev' >> ~/.bashrc
-
     # claude
     npm install -g @anthropic-ai/claude-code --no-audit
     claude --version
@@ -161,14 +149,6 @@ Vagrant.configure("2") do |config|
     # kiro
     curl -fsSL https://cli.kiro.dev/install | bash || true
     kiro-cli --version
-    grep 'kiro()' ~/.bashrc 1>/dev/null || cat >> ~/.bashrc << EOF
-kiro() {
-  if ! kiro-cli whoami &>/dev/null; then
-    kiro-cli login --identity-provider ${AWS_IDENTITY_PROVIDER_URL} --region ${AWS_REGION} --use-device-flow
-  fi
-  kiro-cli "\\$@"
-}
-EOF
   SHELL
 
 end

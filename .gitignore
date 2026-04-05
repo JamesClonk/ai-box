@@ -32,7 +32,7 @@ go.work.sum
 # .vscode/
 
 # bash
-.bashrc
+/.bashrc
 .bash_profile
 .bash_history
 
