@@ -38,10 +38,11 @@ Vagrant.configure("2") do |config|
   #config.vm.network "forwarded_port", guest: 3000, host: 3000, auto_correct: true
 
   # nvim config
-  config.vm.provision "file", source: ".config/nvim", destination: "~/.config/nvim"
-  config.vm.provision "file", source: ".config/.standard.yml", destination: "~/.standard.yml"
-  config.vm.provision "file", source: ".config/.tmux.conf", destination: "~/.tmux.conf"
-  config.vm.provision "file", source: ".config/.bashrc", destination: "~/.bashrc"
+  config.vm.provision "file", source: "config/.config/nvim", destination: "~/.config/nvim"
+  config.vm.provision "file", source: "config/.kiro/skills", destination: "~/.kiro/skills"
+  config.vm.provision "file", source: "config/.standard.yml", destination: "~/.standard.yml"
+  config.vm.provision "file", source: "config/.tmux.conf", destination: "~/.tmux.conf"
+  config.vm.provision "file", source: "config/.bashrc", destination: "~/.bashrc"
 
   # root
   config.vm.provision "shell", privileged: true,
