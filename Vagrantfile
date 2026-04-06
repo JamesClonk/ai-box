@@ -65,7 +65,7 @@ EOF
       cmake openssl dnsutils uuid-runtime netcat-openbsd gettext-base lsb-release psmisc \
       iptables ethtool wireguard net-tools traceroute apache2-utils openssh-client \
       libreadline-dev libtool libssl-dev libffi-dev libyaml-dev libz-dev chrony \
-      bsdextrautils
+      bsdextrautils fonts-noto-color-emoji fonts-noto-core fonts-symbola
 
     # install latest neovim from github releases
     NVIM_ARCH="$(uname -m | sed 's/aarch64/arm64/')"
