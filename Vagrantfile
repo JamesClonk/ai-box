@@ -56,6 +56,8 @@ Vagrant.configure("2") do |config|
 export AWS_IDENTITY_PROVIDER_URL="${AWS_IDENTITY_PROVIDER_URL}"
 export AWS_REGION="${AWS_REGION}"
 EOF
+    VM_ARCH="$(uname -m | sed 's/aarch64/arm64/')"
+
     # basics
     export DEBIAN_FRONTEND=noninteractive
     apt-get update
@@ -68,16 +70,26 @@ EOF
       bsdextrautils
 
     # install latest neovim from github releases
-    NVIM_ARCH="$(uname -m | sed 's/aarch64/arm64/')"
-    curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz" | tar xz -C /opt
-    ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/nvim
-    ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/vim
+    curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${VM_ARCH}.tar.gz" | tar xz -C /opt
+    ln -sf "/opt/nvim-linux-${VM_ARCH}/bin/nvim" /usr/local/bin/nvim
+    ln -sf "/opt/nvim-linux-${VM_ARCH}/bin/nvim" /usr/local/bin/vim
 
     # kubectl
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /' > /etc/apt/sources.list.d/kubernetes.list
     apt-get update
     apt-get install -y kubectl
+
+    # sops
+    SOPS_VERSION="v3.11.0"
+    curl -fsSLo /usr/local/bin/sops https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.${VM_ARCH}
+    chmod +x /usr/local/bin/sops
+
+    # age
+    AGE_VERSION="v1.3.1"
+    curl -fsSL "https://github.com/FiloSottile/age/releases/download/${AGE_VERSION}/age-${AGE_VERSION}-linux-${VM_ARCH}.tar.gz" | tar xz -C /usr/local/bin --strip-components=1 age/age age/age-keygen
+    chmod +x /usr/local/bin/age
+    chmod +x /usr/local/bin/age-keygen
 
     usermod -aG docker vagrant
     chown -R vagrant:vagrant /home/vagrant/projects
