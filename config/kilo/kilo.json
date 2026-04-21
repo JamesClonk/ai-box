@@ -1,0 +1,26 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "model": "llama.cpp/qwen36",
+  "provider": {
+    "llama.cpp": {
+      "models": {
+        "qwen36": {
+          "name": "Qwen3.6-35B-A3B",
+          "id": "unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M",
+          "tool_call": true,
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          }
+        }
+      },
+      "options": {
+        "apiKey": "none",
+        "baseURL": "http://127.0.0.1:8080/v1"
+      }
+    }
+  },
+  "permission": {
+    "bash": "allow"
+  }
+}

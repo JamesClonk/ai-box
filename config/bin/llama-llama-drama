@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# qwen3.6 with 262144 context size and metrics endpoint enabled
+llama-server --ctx-size 262144 --metrics -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
+
