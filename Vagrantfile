@@ -39,9 +39,9 @@ Vagrant.configure("2") do |config|
 
   # config files
   config.vm.provision "file", source: "config/.config/nvim", destination: "~/.config/nvim"
+  config.vm.provision "file", source: "config/.config/kilo", destination: "~/.config/kilo"
+  config.vm.provision "file", source: "config/.config/opencode", destination: "~/.config/opencode"
   config.vm.provision "file", source: "config/.kiro/skills", destination: "~/.kiro/skills"
-  config.vm.provision "file", source: "config/kilo", destination: "~/.config/kilo"
-  config.vm.provision "file", source: "config/opencode", destination: "~/.config/opencode"
   config.vm.provision "file", source: "config/.standard.yml", destination: "~/.standard.yml"
   config.vm.provision "file", source: "config/.tmux.conf", destination: "~/.tmux.conf"
   config.vm.provision "file", source: "config/.bashrc", destination: "~/.bashrc"
