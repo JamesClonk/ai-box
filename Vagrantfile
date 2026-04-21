@@ -162,6 +162,10 @@ EOF
     # kiro
     curl -fsSL https://cli.kiro.dev/install | bash || true
     kiro-cli --version
+
+    # kilo
+    npm install -g @kilocode/cli || true
+    kilo --version
   SHELL
 
 end
