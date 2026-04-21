@@ -166,6 +166,10 @@ EOF
     # kilo
     npm install -g @kilocode/cli || true
     kilo --version
+
+    # opencode
+    npm install -g opencode-ai --no-audit
+    opencode --version
   SHELL
 
 end
