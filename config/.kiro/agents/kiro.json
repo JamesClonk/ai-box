@@ -1,11 +1,17 @@
 {
-  "name": "default",
+  "name": "kiro",
+  "description": "Customized kiro agent that cannot read .git metadata",
+  "resources": [
+    "file://.kiro/steering/**/*.md",
+    "skill://~/.kiro/skills/**/SKILL.md"
+  ],
   "tools": ["*"],
+  "allowedTools": ["*"],
   "toolsSettings": {
-    "execute_bash": {
+    "shell": {
       "deniedCommands": ["git.*", ".*\\bgit\\b.*"]
     },
-    "fs_read": {
+    "read": {
       "deniedPaths": [
         "~/.config/**",
         "~/.local/**",
@@ -13,7 +19,7 @@
         "**/vendor/**"
       ]
     },
-    "fs_write": {
+    "write": {
       "deniedPaths": [
         "~/.config/**",
         "~/.local/**",
