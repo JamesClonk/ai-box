@@ -41,6 +41,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "config/.config/nvim", destination: "~/.config/nvim"
   config.vm.provision "file", source: "config/.config/kilo", destination: "~/.config/kilo"
   config.vm.provision "file", source: "config/.config/opencode", destination: "~/.config/opencode"
+  config.vm.provision "file", source: "config/.kiro/agents", destination: "~/.kiro/agents"
+  config.vm.provision "file", source: "config/.kiro/settings", destination: "~/.kiro/settings"
   config.vm.provision "file", source: "config/.kiro/skills", destination: "~/.kiro/skills"
   config.vm.provision "file", source: "config/.standard.yml", destination: "~/.standard.yml"
   config.vm.provision "file", source: "config/.tmux.conf", destination: "~/.tmux.conf"

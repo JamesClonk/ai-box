@@ -1,3 +1,4 @@
 {
-  "chat.defaultAgent": "default"
+  "chat.defaultAgent": "default",
+  "chat.ui": "legacy"
 }
