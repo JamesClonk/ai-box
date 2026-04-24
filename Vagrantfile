@@ -166,10 +166,6 @@ Vagrant.configure("2") do |config|
     curl -fsSL https://cli.kiro.dev/install | bash || true
     kiro-cli --version
 
-    # kilo
-    npm install -g @kilocode/cli || true
-    kilo --version
-
     # opencode
     npm install -g opencode-ai --no-audit
     opencode --version

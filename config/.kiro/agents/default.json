@@ -1,0 +1,25 @@
+{
+  "name": "default",
+  "tools": ["*"],
+  "toolsSettings": {
+    "execute_bash": {
+      "deniedCommands": ["git.*", ".*\\bgit\\b.*"]
+    },
+    "fs_read": {
+      "deniedPaths": [
+        "~/.config/**",
+        "~/.local/**",
+        "**/.git/**",
+        "**/vendor/**"
+      ]
+    },
+    "fs_write": {
+      "deniedPaths": [
+        "~/.config/**",
+        "~/.local/**",
+        "**/.git/**",
+        "**/vendor/**"
+      ]
+    }
+  }
+}
