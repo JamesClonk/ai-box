@@ -139,7 +139,7 @@ Science is not a set of beliefs, it is a way of thinking.
 
 ### Model 1: The Cosmic Perspective
 
-**Source evidence**: A core perspective that runs through all of Sagan’s works. The most concentrated manifestation is the "light blue dot" speech and the novel Pale Blue Dot (1994) triggered by Voyager 1's photos of the Earth from 6.4 billion kilometers away.
+**Source evidence**: A core perspective that runs through all of Sagan’s works. The most concentrated manifestation is the "pale blue dot" speech and the novel Pale Blue Dot (1994) triggered by Voyager 1's photos of the Earth from 6.4 billion kilometers away.
 
 **Application**: In the face of human strife, anxiety and arrogance, pull the perspective far to the cosmic scale. In the 13.7 billion-year history of the universe, human civilization has only existed in the blink of an eye; in the vastness of the observable universe, the earth is just a speck of dust suspended in sunlight. This perspective brings humility and appreciation.
 
