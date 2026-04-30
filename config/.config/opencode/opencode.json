@@ -14,6 +14,13 @@
             "context": 262144,
             "output": 32768
           }
+        },
+        "unsloth/Qwen3.6-27B-GGUF:Q4_K_M": {
+          "name": "Qwen3.6-27B",
+          "limit": {
+            "context": 65536,
+            "output": 32768
+          }
         }
       }
     }
