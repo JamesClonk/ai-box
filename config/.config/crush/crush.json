@@ -1,0 +1,38 @@
+{
+  "$schema": "https://charm.land/crush.json",
+  "options": {
+    "disable_metrics": true,
+    "attribution": {
+      "trailer_style": "none",
+      "generated_with": false
+    }
+  },
+  "lsp": {
+    "go": {
+      "command": "gopls",
+      "env": {
+        "GOTOOLCHAIN": "go1.25.6"
+      }
+    }
+  },
+  "providers": {
+    "llama.cpp": {
+      "name": "llama.cpp",
+      "type": "openai-compat",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "models": [
+        {
+          "id": "unsloth/Qwen3.6-27B-GGUF:UD-Q6_K_XL",
+          "name": "Qwen3.6-27B",
+          "context_window": 65536,
+          "default_max_tokens": 32768,
+          "can_reason": true,
+          "supports_attachments": true
+        }
+      ]
+    }
+  },
+  "options": {
+    "disable_provider_auto_update": true
+  }
+}

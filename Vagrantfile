@@ -39,6 +39,7 @@ Vagrant.configure("2") do |config|
 
   # config files
   config.vm.provision "file", source: "config/.config/nvim", destination: "~/.config/nvim"
+  config.vm.provision "file", source: "config/.config/crush", destination: "~/.config/crush"
   config.vm.provision "file", source: "config/.config/kilo", destination: "~/.config/kilo"
   config.vm.provision "file", source: "config/.config/opencode", destination: "~/.config/opencode"
   config.vm.provision "file", source: "config/.kiro/agents", destination: "~/.kiro/agents"
@@ -171,5 +172,8 @@ Vagrant.configure("2") do |config|
     # opencode
     npm install -g opencode-ai --no-audit
     opencode --version
+
+    # crush
+    go install github.com/charmbracelet/crush@latest
     SHELL
 end

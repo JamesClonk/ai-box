@@ -4,7 +4,7 @@
 llama-server --ctx-size 262144 --metrics -hf unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_M
 
 # dense qwen3.6 optimal for coding on m4 macbook
-llama-server --ctx-size 65536 -hf unsloth/Qwen3.6-27B-GGUF:Q4_K_M \
+llama-server --ctx-size 65536 -hf unsloth/Qwen3.6-27B-GGUF:UD-Q6_K_XL \
 	--no-mmproj \
 	--fit on \
 	-np 1 \
