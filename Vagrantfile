@@ -174,6 +174,9 @@ Vagrant.configure("2") do |config|
     opencode --version
 
     # crush
-    go install github.com/charmbracelet/crush@latest
+    VM_ARCH="$(uname -m | sed 's/amd64/x86_64/' | sed 's/aarch64/arm64/')"
+    CRUSH_VERSION="0.65.2"
+    curl -fsSL https://github.com/charmbracelet/crush/releases/download/v${CRUSH_VERSION}/crush_${CRUSH_VERSION}_Linux_${VM_ARCH}.tar.gz | tar xz -C /home/vagrant/bin --strip-components=1 crush_${CRUSH_VERSION}_Linux_${VM_ARCH}/crush
+    chmod +x /home/vagrant/bin/crush
     SHELL
 end
