@@ -1,6 +1,23 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
+    "saip": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "saip",
+      "options": {
+        "baseURL": "<YOUR_URL_HERE>/qwen3.5-397b-a17b/v1",
+        "apiKey": "<YOUR_API_KEY_HERE>",
+      },
+      "models": {
+        "qwen/qwen3.5-397b-a17b": {
+          "name": "Qwen3.5-397B-A17B",
+          "limit": {
+            "context": 262144,
+            "output": 65536
+          }
+        }
+      }
+    },
     "llama.cpp": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "llama.cpp",
