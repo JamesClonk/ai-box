@@ -2,6 +2,7 @@
   "$schema": "https://charm.land/crush.json",
   "options": {
     "disable_metrics": true,
+    "disable_provider_auto_update": true,
     "attribution": {
       "trailer_style": "none",
       "generated_with": false
@@ -50,7 +51,19 @@
       ]
     }
   },
-  "options": {
-    "disable_provider_auto_update": true
+  "mcp": {
+    "kubernetes": {
+      "type": "http",
+      "url": "http://localhost:9280/mcp",
+      "timeout": 120,
+      "disabled": false,
+      "disabled_tools": [
+        "apply_resource",
+        "manage_workload",
+        "manage_cronjob",
+        "manage_gitops",
+        "manage_node"
+      ]
+    }
   }
 }
