@@ -1,5 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# if param=="true", we will overwrite crush.json config file
+WRITE_CONFIG="${1:-false}"
+
+# credentials
+SAIP_AUTH_URL="fix-me"
+SAIP_CLIENT_ID="fix-me"
+SAIP_CLIENT_SECRET="fix-me"
+
+# fetch token
+export SAIP_API_KEY=$(curl -sf -X POST "$SAIP_AUTH_URL" \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-u "${SAIP_CLIENT_ID}:${SAIP_CLIENT_SECRET}" \
+	-d "grant_type=client_credentials" | jq -r '.access_token')
+
+if [[ -z "$SAIP_API_KEY" || "$SAIP_API_KEY" == "null" ]]; then
+	echo "ERROR: Failed to obtain access token" >&2
+	exit 1
+fi
+
+if [[ "$WRITE_CONFIG" == "true" ]]; then
+	# write crush.json
+	mkdir -p ~/.config/crush || true
+	cat >~/.config/crush/crush.json <<EOF
 {
-  "$schema": "https://charm.land/crush.json",
+  "\$schema": "https://charm.land/crush.json",
   "options": {
     "disable_metrics": true,
     "disable_provider_auto_update": true,
@@ -21,8 +48,8 @@
     "saip": {
       "name": "saip",
       "type": "openai-compat",
-      "base_url": "<YOUR_URL_HERE>/qwen3.5-397b-a17b/v1",
-      "api_key": "<YOUR_API_KEY_HERE>",
+      "base_url": "https://api.swisscom.com/products/swiss-ai-platform/internal-all-models/v1",
+      "api_key": "\$SAIP_API_KEY",
       "extra_body": {
         "chat_template_kwargs": {
           "enable_thinking": true
@@ -34,8 +61,7 @@
           "name": "GLM-5.2",
           "context_window": 262144,
           "default_max_tokens": 32768,
-          "reasoning_levels": ["high", "max"],
-          "default_reasoning_effort": "max",
+          "default_reasoning_effort": "high",
           "supports_attachments": false,
           "cost_per_1m_in": 4.06,
           "cost_per_1m_out": 9.76
@@ -49,21 +75,6 @@
           "supports_attachments": true,
           "cost_per_1m_in": 2.57,
           "cost_per_1m_out": 6.45
-        }
-      ]
-    },
-    "llama.cpp": {
-      "name": "llama.cpp",
-      "type": "openai-compat",
-      "base_url": "http://127.0.0.1:8080/v1",
-      "models": [
-        {
-          "id": "unsloth/Qwen3.6-27B-GGUF:UD-Q6_K_XL",
-          "name": "Qwen3.6-27B",
-          "context_window": 65536,
-          "default_max_tokens": 32768,
-          "can_reason": true,
-          "supports_attachments": true
         }
       ]
     }
@@ -84,3 +95,9 @@
     }
   }
 }
+EOF
+	echo "crush.json written to ~/.config/crush/crush.json"
+fi
+
+echo "starting crush now ..."
+crush

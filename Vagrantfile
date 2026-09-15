@@ -121,7 +121,8 @@ Vagrant.configure("2") do |config|
     # mise languages
     mise install golang@1.22.12
     mise install golang@1.24.12
-    mise use --global golang@1.25.6
+    mise install golang@1.25.6
+    mise use --global golang@1.26.8
     mise use --global ruby@3.2.10
     mise use --global python@3.13.11
     mise use --global node@22
@@ -161,7 +162,10 @@ Vagrant.configure("2") do |config|
     nvim --headless +TSUpdate +qall
     nvim --headless +'helptags ALL' +qall
 
-    # claude
+    # copilot trash
+    npm install -g @github/copilot
+
+    # claude trash
     npm install -g @anthropic-ai/claude-code --no-audit
     claude --version
 
@@ -175,7 +179,7 @@ Vagrant.configure("2") do |config|
 
     # crush
     VM_ARCH="$(uname -m | sed 's/amd64/x86_64/' | sed 's/aarch64/arm64/')"
-    CRUSH_VERSION="0.65.2"
+    CRUSH_VERSION="0.94.2"
     curl -fsSL https://github.com/charmbracelet/crush/releases/download/v${CRUSH_VERSION}/crush_${CRUSH_VERSION}_Linux_${VM_ARCH}.tar.gz | tar xz -C /home/vagrant/bin --strip-components=1 crush_${CRUSH_VERSION}_Linux_${VM_ARCH}/crush
     chmod +x /home/vagrant/bin/crush
     SHELL
