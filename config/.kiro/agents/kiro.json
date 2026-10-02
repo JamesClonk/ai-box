@@ -1,6 +1,6 @@
 {
   "name": "kiro",
-  "description": "Customized kiro agent that cannot read .git metadata",
+  "description": "Customized kiro agent that should not read secretive config data",
   "resources": [
     "file://.kiro/steering/**/*.md",
     "skill://~/.kiro/skills/**/SKILL.md"
@@ -8,23 +8,16 @@
   "tools": ["*"],
   "allowedTools": ["*"],
   "toolsSettings": {
-    "shell": {
-      "deniedCommands": ["git.*", ".*\\bgit\\b.*"]
-    },
     "read": {
       "deniedPaths": [
         "~/.config/**",
-        "~/.local/**",
-        "**/.git/**",
-        "**/vendor/**"
+        "~/.local/**"
       ]
     },
     "write": {
       "deniedPaths": [
         "~/.config/**",
-        "~/.local/**",
-        "**/.git/**",
-        "**/vendor/**"
+        "~/.local/**"
       ]
     }
   }
