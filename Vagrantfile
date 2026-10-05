@@ -14,8 +14,8 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder File.expand_path("~/04_virt/projects"), "/home/vagrant/projects", type: "virtualbox", id: "projects", owner: "vagrant", group: "vagrant"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "8192"
-    vb.cpus = 4
+    vb.memory = "16384"
+    vb.cpus = 8
     vb.gui = false
     vb.name = vm_name
     vb.customize ["modifyvm", :id, "--audio", "none"]
