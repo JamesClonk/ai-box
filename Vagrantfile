@@ -9,7 +9,7 @@ end
 
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-24.04"
-  config.disksize.size = "50GB"
+  #config.disksize.size = "50GB"
 
   # config.vm.synced_folder ".", "/home/vagrant/projects", type: "virtualbox"
   config.vm.synced_folder File.expand_path("~/04_virt/projects"), "/home/vagrant/projects", type: "virtualbox", id: "projects", owner: "vagrant", group: "vagrant"
@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--audio", "none"]
     vb.customize ["modifyvm", :id, "--usb", "off"]
   end
+  #config.vm.network :forwarded_port, guest: 22, host: 2251
 
   ## use this in case any specific localhost:port access from VM->Host is needed
   # config.ssh.extra_args = [
